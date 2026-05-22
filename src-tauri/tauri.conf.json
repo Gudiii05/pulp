@@ -1,0 +1,57 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "Pulp",
+  "version": "0.1.0",
+  "identifier": "com.pulp.clipboard",
+  "build": {
+    "beforeDevCommand": "npm run dev",
+    "devUrl": "http://localhost:1420",
+    "beforeBuildCommand": "npm run build",
+    "frontendDist": "../dist"
+  },
+  "app": {
+    "windows": [
+      {
+        "label": "main",
+        "title": "Pulp",
+        "width": 380,
+        "height": 600,
+        "minWidth": 380,
+        "minHeight": 200,
+        "maxWidth": 380,
+        "maxHeight": 600,
+        "resizable": false,
+        "decorations": false,
+        "transparent": true,
+        "alwaysOnTop": true,
+        "skipTaskbar": true,
+        "visible": false,
+        "center": true,
+        "shadow": false
+      }
+    ],
+    "security": {
+      "csp": null
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "createUpdaterArtifacts": true,
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.ico",
+      "icons/icon.png"
+    ]
+  },
+  "plugins": {
+    "updater": {
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEJBNDM3RkM2REVFQTYwRDkKUldUWllPcmV4bjlEdW1UWCtJaDFFQ2FiTmRGZzBjd01XTVRLckM5NnBoZkFRY0g5ZjFoZS84RFMK",
+      "endpoints": [
+        "https://github.com/Gudiii05/pulp/releases/latest/download/latest.json"
+      ]
+    }
+  }
+}

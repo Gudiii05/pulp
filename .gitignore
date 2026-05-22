@@ -1,0 +1,35 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+src-tauri/target/
+src-tauri/gen/
+.tsbuild-node/
+
+# Local data
+*.db
+*.db-journal
+
+# Signing keys — NEVER commit these
+*.key
+*.key.pub
+
+# Env files
+.env
+.env.local
+.env.*.local
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
+
+# Agent / tooling artifacts
+.atl/
+.claude/
+memory/

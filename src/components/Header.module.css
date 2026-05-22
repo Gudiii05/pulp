@@ -1,0 +1,98 @@
+.header {
+  height: var(--header-h);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--space-3);
+  gap: var(--space-2);
+  border-bottom: 1px solid var(--border);
+  background: transparent;
+  cursor: grab;
+}
+
+.header:active {
+  cursor: grabbing;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.logoBadge {
+  width: 26px;
+  height: 26px;
+  display: grid;
+  place-items: center;
+}
+
+.logo {
+  display: block;
+  border-radius: 6px;
+}
+
+.wordmark {
+  font-size: 15px;
+  font-weight: 650;
+  letter-spacing: -0.35px;
+  color: var(--text-primary);
+}
+
+.live {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--green-live);
+  animation: pulse 1.8s ease-in-out infinite;
+  box-shadow: 0 0 0 3px rgba(52, 199, 89, 0.18);
+}
+
+.liveLabel {
+  font-size: 11px;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.right {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.countPill {
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  min-width: 22px;
+  text-align: center;
+}
+
+.themeToggle {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  color: var(--text-secondary);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: background 150ms ease-out, color 150ms ease-out;
+}
+
+.themeToggle:hover {
+  background: var(--bg-hover);
+  color: var(--accent);
+}

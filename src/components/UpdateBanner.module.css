@@ -1,0 +1,87 @@
+.banner {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 8px 12px;
+  margin: 0 var(--space-3) var(--space-2);
+  border-radius: var(--radius-card);
+  background: var(--accent-soft);
+  border: 1px solid rgba(255, 92, 43, 0.3);
+  font-size: 12px;
+  color: var(--text-primary);
+  animation: itemEnter 200ms ease-out both;
+  position: relative;
+}
+
+.text {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.version {
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.actions {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.install {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  background: var(--accent);
+  color: #ffffff;
+  border: 1px solid transparent;
+  transition: filter 120ms ease-out;
+}
+
+.install:hover {
+  filter: brightness(1.08);
+}
+
+.dismiss {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 15px;
+  line-height: 1;
+  color: var(--text-secondary);
+  background: transparent;
+  transition: background 120ms ease-out, color 120ms ease-out;
+}
+
+.dismiss:hover {
+  background: rgba(0, 0, 0, 0.05);
+  color: var(--text-primary);
+}
+
+.error {
+  background: rgba(255, 59, 48, 0.1);
+  border-color: rgba(255, 59, 48, 0.3);
+}
+
+.progressTrack {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: rgba(255, 92, 43, 0.18);
+  border-radius: 0 0 var(--radius-card) var(--radius-card);
+  overflow: hidden;
+}
+
+.progressBar {
+  height: 100%;
+  background: var(--accent);
+  transition: width 200ms ease-out;
+}

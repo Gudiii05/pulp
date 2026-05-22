@@ -1,0 +1,122 @@
+:root {
+  /* Solid base values — used for badges, borders, etc. */
+  --text-primary: #161618;
+  --text-secondary: #57575b;
+  --text-tertiary: #98989d;
+
+  /* Translucent surfaces for the glass aesthetic */
+  --bg-base: rgba(236, 236, 240, 0.72);
+  --bg-card: rgba(255, 255, 255, 0.6);
+  --bg-hover: rgba(255, 255, 255, 0.85);
+
+  /* Solid surface for clip content (no glass, for readability) */
+  --bg-card-solid: #ffffff;
+  --bg-card-solid-hover: #f4f4f7;
+
+  --glass-blur: saturate(180%) blur(30px);
+  --glass-blur-card: saturate(160%) blur(14px);
+
+  --accent: #ff5c2b;
+  --accent-soft: rgba(255, 92, 43, 0.12);
+
+  --badge-text-bg: rgba(26, 86, 219, 0.12);
+  --badge-text-fg: #1a56db;
+  --badge-code-bg: rgba(14, 98, 69, 0.12);
+  --badge-code-fg: #0e6245;
+  --badge-img-bg: rgba(196, 75, 0, 0.14);
+  --badge-img-fg: #c44b00;
+
+  --border: rgba(0, 0, 0, 0.09);
+  --border-strong: rgba(0, 0, 0, 0.15);
+  --inner-sheen: rgba(255, 255, 255, 0.6);
+
+  --shadow-window: 0 14px 44px rgba(0, 0, 0, 0.2),
+    0 1px 0 rgba(255, 255, 255, 0.6) inset;
+  --shadow-card: 0 1px 1px rgba(0, 0, 0, 0.03),
+    0 3px 8px rgba(0, 0, 0, 0.05);
+
+  --radius-window: 14px;
+  --radius-card: 10px;
+  --radius-pill: 999px;
+  --radius-sm: 8px;
+
+  --font-system: -apple-system, BlinkMacSystemFont, "SF Pro Display",
+    "Segoe UI Variable", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "SF Mono", "JetBrains Mono", Menlo, Consolas, "Cascadia Code",
+    monospace;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+
+  --header-h: 48px;
+  --search-h: 40px;
+  --tabs-h: 36px;
+  --footer-h: 36px;
+
+  --green-live: #34c759;
+  --red-danger: #ff3b30;
+}
+
+:root[data-theme="dark"] {
+  --text-primary: #f5f5f7;
+  --text-secondary: #ebebf599;
+  --text-tertiary: #ebebf566;
+
+  --bg-base: rgba(28, 28, 30, 0.68);
+  --bg-card: rgba(58, 58, 60, 0.45);
+  --bg-hover: rgba(72, 72, 76, 0.6);
+
+  --bg-card-solid: #2c2c2e;
+  --bg-card-solid-hover: #38383a;
+
+  --badge-text-bg: rgba(26, 86, 219, 0.22);
+  --badge-text-fg: #93b8ff;
+  --badge-code-bg: rgba(14, 98, 69, 0.25);
+  --badge-code-fg: #5fd6a3;
+  --badge-img-bg: rgba(196, 75, 0, 0.25);
+  --badge-img-fg: #ff9b6e;
+
+  --border: rgba(255, 255, 255, 0.08);
+  --border-strong: rgba(255, 255, 255, 0.16);
+  --inner-sheen: rgba(255, 255, 255, 0.06);
+
+  --shadow-window: 0 12px 40px rgba(0, 0, 0, 0.55),
+    0 1px 0 rgba(255, 255, 255, 0.06) inset;
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --accent-soft: rgba(255, 92, 43, 0.2);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]):not([data-theme="dark"]) {
+    --text-primary: #f5f5f7;
+    --text-secondary: #ebebf599;
+    --text-tertiary: #ebebf566;
+
+    --bg-base: rgba(28, 28, 30, 0.68);
+    --bg-card: rgba(58, 58, 60, 0.45);
+    --bg-hover: rgba(72, 72, 76, 0.6);
+
+    --bg-card-solid: #2c2c2e;
+    --bg-card-solid-hover: #38383a;
+
+    --badge-text-bg: rgba(26, 86, 219, 0.22);
+    --badge-text-fg: #93b8ff;
+    --badge-code-bg: rgba(14, 98, 69, 0.25);
+    --badge-code-fg: #5fd6a3;
+    --badge-img-bg: rgba(196, 75, 0, 0.25);
+    --badge-img-fg: #ff9b6e;
+
+    --border: rgba(255, 255, 255, 0.08);
+    --border-strong: rgba(255, 255, 255, 0.16);
+    --inner-sheen: rgba(255, 255, 255, 0.06);
+
+    --shadow-window: 0 12px 40px rgba(0, 0, 0, 0.55),
+      0 1px 0 rgba(255, 255, 255, 0.06) inset;
+    --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.3);
+    --accent-soft: rgba(255, 92, 43, 0.2);
+  }
+}

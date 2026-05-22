@@ -1,0 +1,189 @@
+.item {
+  background: var(--bg-card-solid);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  cursor: pointer;
+  transition: background 150ms ease-out, border-color 150ms ease-out;
+  animation: itemEnter 200ms ease-out both;
+  box-shadow: var(--shadow-card);
+  position: relative;
+}
+
+.item:hover {
+  background: var(--bg-card-solid-hover);
+  border-color: var(--border-strong);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04),
+    0 6px 16px rgba(0, 0, 0, 0.08);
+}
+
+.row1 {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+}
+
+.spacer {
+  flex: 1;
+}
+
+.badge {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 7px;
+  border-radius: var(--radius-sm);
+  text-transform: lowercase;
+  letter-spacing: 0.2px;
+}
+
+.badgeText {
+  background: var(--badge-text-bg);
+  color: var(--badge-text-fg);
+}
+
+.badgeCode {
+  background: var(--badge-code-bg);
+  color: var(--badge-code-fg);
+}
+
+.badgeImg {
+  background: var(--badge-img-bg);
+  color: var(--badge-img-fg);
+}
+
+.pinIcon {
+  color: var(--accent);
+  display: inline-flex;
+}
+
+.time {
+  font-size: 11px;
+  color: var(--text-tertiary);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Content grows with text up to a max, then fades only if overflowing. */
+.contentWrap {
+  max-height: 180px;
+  overflow: hidden;
+  position: relative;
+}
+
+.contentWrap.overflowing::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 28px;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    var(--bg-card-solid) 95%
+  );
+  transition: background 150ms ease-out;
+}
+
+.item:hover .contentWrap.overflowing::after {
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    var(--bg-card-solid-hover) 95%
+  );
+}
+
+.text {
+  font-size: 13.5px;
+  font-weight: 450;
+  color: var(--text-primary);
+  line-height: 1.5;
+  letter-spacing: -0.005em;
+  word-break: break-word;
+  white-space: pre-wrap;
+  user-select: text;
+}
+
+.code {
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--badge-code-fg);
+  background: var(--badge-code-bg);
+  border-radius: 6px;
+  padding: 8px 10px;
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+  line-height: 1.5;
+  letter-spacing: 0;
+  user-select: text;
+}
+
+.imageWrap {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.image {
+  max-height: 100px;
+  width: auto;
+  align-self: flex-start;
+  object-fit: contain;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+}
+
+.imageMeta {
+  font-size: 11px;
+  color: var(--text-tertiary);
+}
+
+/* Floating action icons in the top-right corner — they appear without
+   pushing the layout (position: absolute). */
+.actions {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: flex;
+  gap: 4px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 150ms ease-out;
+}
+
+.item:hover .actions,
+.item:focus-within .actions {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.iconBtn {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  display: grid;
+  place-items: center;
+  color: var(--text-secondary);
+  background: var(--bg-card-solid);
+  border: 1px solid var(--border);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  transition: background 120ms ease-out, color 120ms ease-out,
+    border-color 120ms ease-out;
+}
+
+.iconBtn:hover {
+  background: var(--bg-card-solid-hover);
+  color: var(--text-primary);
+  border-color: var(--border-strong);
+}
+
+.danger:hover {
+  color: var(--red-danger);
+  border-color: var(--red-danger);
+}
