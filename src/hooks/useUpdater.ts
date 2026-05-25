@@ -39,8 +39,11 @@ export function useUpdater() {
         setState({ status: "idle" });
       }
     } catch (err) {
-      console.error("update check failed", err);
-      setState({ status: "error", error: String(err) });
+      // Update check failures (network down, endpoint 404 because no
+      // latest.json is published yet, etc.) should not bother the user.
+      // We just stay idle and log it.
+      console.warn("update check skipped:", err);
+      setState({ status: "idle" });
     }
   }, []);
 

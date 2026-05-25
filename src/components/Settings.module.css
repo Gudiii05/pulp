@@ -63,6 +63,38 @@
   gap: var(--space-2);
 }
 
+.row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.rowText {
+  flex: 1;
+  min-width: 0;
+}
+
+.rowLabel {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.linkBtn {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--accent);
+  background: transparent;
+  padding: 4px 0;
+  text-align: left;
+  transition: opacity 120ms ease-out;
+}
+
+.linkBtn:hover {
+  opacity: 0.75;
+}
+
 .label {
   font-size: 12px;
   font-weight: 600;

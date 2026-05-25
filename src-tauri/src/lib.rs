@@ -80,6 +80,57 @@ fn copy_to_clipboard(
 }
 
 #[tauri::command]
+fn copy_image_to_clipboard(
+    b64_png: String,
+    watcher: tauri::State<WatcherHandle>,
+) -> Result<(), String> {
+    clipboard::write_image_to_clipboard(&b64_png, &watcher)
+}
+
+#[tauri::command]
+fn get_paused(watcher: tauri::State<WatcherHandle>) -> bool {
+    watcher.lock().unwrap().paused
+}
+
+#[tauri::command]
+fn open_url(url: String) -> Result<(), String> {
+    // Sanity check — only allow http/https
+    if !(url.starts_with("http://") || url.starts_with("https://")) {
+        return Err("only http/https URLs are allowed".to_string());
+    }
+    // On Windows the shell verb is `start` via cmd. The empty "" is the
+    // window title placeholder so URLs with special chars don't break.
+    #[cfg(target_os = "windows")]
+    {
+        std::process::Command::new("cmd")
+            .args(["/c", "start", "", &url])
+            .spawn()
+            .map_err(|e| e.to_string())?;
+    }
+    #[cfg(target_os = "macos")]
+    {
+        std::process::Command::new("open")
+            .arg(&url)
+            .spawn()
+            .map_err(|e| e.to_string())?;
+    }
+    #[cfg(target_os = "linux")]
+    {
+        std::process::Command::new("xdg-open")
+            .arg(&url)
+            .spawn()
+            .map_err(|e| e.to_string())?;
+    }
+    Ok(())
+}
+
+#[tauri::command]
+fn set_paused(watcher: tauri::State<WatcherHandle>, paused: bool) -> Result<(), String> {
+    watcher.lock().unwrap().paused = paused;
+    Ok(())
+}
+
+#[tauri::command]
 fn set_max_history(state: tauri::State<DbState>, max: u32) -> Result<(), String> {
     let mut db = state.lock().unwrap();
     db.set_max_entries(max as usize);
@@ -234,6 +285,10 @@ pub fn run() {
             delete_clip,
             clear_history,
             copy_to_clipboard,
+            copy_image_to_clipboard,
+            get_paused,
+            set_paused,
+            open_url,
             set_max_history,
             toggle_window,
             hide_window,

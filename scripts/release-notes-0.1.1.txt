@@ -1,0 +1,9 @@
+## Cambios
+
+- **Pegar imágenes ahora funciona** — al hacer clic en una imagen del historial, se copia al portapapeles correctamente para que puedas pegarla en cualquier app.
+- Las imágenes se guardan en resolución completa (antes se guardaba solo una miniatura).
+- El check de actualizaciones ahora es silencioso si el servidor no responde (no más banner rojo de error).
+
+## Actualización automática
+
+Si ya tenés Pulp v0.1.0 instalada, vas a ver un banner naranja al arrancar la app indicando que hay una nueva versión. Haz clic en "Install" y Pulp se actualiza solo.

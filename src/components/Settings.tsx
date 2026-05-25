@@ -1,17 +1,25 @@
 import { useEffect, useState } from "react";
 import { invoke } from "@tauri-apps/api/core";
 import HotkeyCapture from "./HotkeyCapture";
+import Toggle from "./Toggle";
+import { useAutostart } from "../hooks/useAutostart";
 import styles from "./Settings.module.css";
 
 interface SettingsProps {
   open: boolean;
   onClose: () => void;
+  onReplayOnboarding: () => void;
 }
 
-export default function Settings({ open, onClose }: SettingsProps) {
+export default function Settings({
+  open,
+  onClose,
+  onReplayOnboarding,
+}: SettingsProps) {
   const [hotkey, setHotkey] = useState<string>("CommandOrControl+Shift+V");
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const autostart = useAutostart();
 
   useEffect(() => {
     if (!open) return;
@@ -36,7 +44,7 @@ export default function Settings({ open, onClose }: SettingsProps) {
   if (!open) return null;
 
   return (
-    <div className={styles.overlay} onClick={onClose}>
+    <div className={styles.overlay} onClick={onClose} data-settings-root>
       <div className={styles.panel} onClick={(e) => e.stopPropagation()}>
         <div className={styles.header}>
           <h2 className={styles.title}>Settings</h2>
@@ -58,6 +66,32 @@ export default function Settings({ open, onClose }: SettingsProps) {
           </div>
           {saving && <div className={styles.saving}>Saving…</div>}
           {error && <div className={styles.error}>{error}</div>}
+        </div>
+
+        <div className={styles.section}>
+          <div className={styles.row}>
+            <div className={styles.rowText}>
+              <div className={styles.rowLabel}>Start with Windows</div>
+              <div className={styles.help}>
+                Pulp launches automatically when you sign in to your account.
+              </div>
+            </div>
+            <Toggle
+              checked={!!autostart.enabled}
+              onChange={autostart.toggle}
+              disabled={autostart.enabled === null || autostart.busy}
+              label="Start with Windows"
+            />
+          </div>
+        </div>
+
+        <div className={styles.section}>
+          <button
+            className={styles.linkBtn}
+            onClick={onReplayOnboarding}
+          >
+            Show welcome tour again
+          </button>
         </div>
       </div>
     </div>

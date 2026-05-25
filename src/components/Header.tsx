@@ -6,14 +6,22 @@ import styles from "./Header.module.css";
 interface HeaderProps {
   count: number;
   theme: Theme;
+  paused: boolean;
+  locked: boolean;
   onToggleTheme: () => void;
+  onTogglePaused: () => void;
+  onToggleLocked: () => void;
   onOpenSettings: () => void;
 }
 
 export default function Header({
   count,
   theme,
+  paused,
+  locked,
   onToggleTheme,
+  onTogglePaused,
+  onToggleLocked,
   onOpenSettings,
 }: HeaderProps) {
   const isDark = theme === "dark";
@@ -38,15 +46,67 @@ export default function Header({
         <span className={styles.wordmark}>Pulp</span>
       </div>
 
-      <div className={styles.live}>
+      <button
+        className={`${styles.live} ${paused ? styles.livePaused : ""}`}
+        onClick={onTogglePaused}
+        title={paused ? "Resume capture" : "Pause capture"}
+        aria-label={paused ? "Resume capture" : "Pause capture"}
+      >
         <span className={styles.dot} />
-        <span className={styles.liveLabel}>listening</span>
-      </div>
+        <span className={styles.liveLabel}>
+          {paused ? "paused" : "listening"}
+        </span>
+      </button>
 
       <div className={styles.right}>
         <span className={styles.countPill} title="clips stored">
           {count}
         </span>
+        <button
+          className={`${styles.themeToggle} ${locked ? styles.lockActive : ""}`}
+          onClick={onToggleLocked}
+          aria-label={locked ? "Unlock window (auto-hide on copy)" : "Lock window open (stay open on copy)"}
+          aria-pressed={locked}
+          title={locked ? "Locked open — click to unlock" : "Lock window open"}
+        >
+          {locked ? (
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+              <rect
+                x="5"
+                y="11"
+                width="14"
+                height="9"
+                rx="2"
+                stroke="currentColor"
+                strokeWidth="1.6"
+              />
+              <path
+                d="M8 11V8a4 4 0 0 1 8 0v3"
+                stroke="currentColor"
+                strokeWidth="1.6"
+                strokeLinecap="round"
+              />
+            </svg>
+          ) : (
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+              <rect
+                x="5"
+                y="11"
+                width="14"
+                height="9"
+                rx="2"
+                stroke="currentColor"
+                strokeWidth="1.6"
+              />
+              <path
+                d="M8 11V8a4 4 0 0 1 7.5-2"
+                stroke="currentColor"
+                strokeWidth="1.6"
+                strokeLinecap="round"
+              />
+            </svg>
+          )}
+        </button>
         <button
           className={styles.themeToggle}
           onClick={onOpenSettings}

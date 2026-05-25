@@ -1,0 +1,15 @@
+## Novedades
+
+- **Navegación con teclado** — usa las flechas para moverte por la lista, Enter para copiar y cerrar, Esc para cerrar sin copiar.
+- **Atajos rápidos** — Ctrl+1 a Ctrl+9 copian directamente los primeros 9 elementos del historial. Sin tocar el ratón.
+- **Pausar/reanudar la captura** — haz clic en el indicador "listening" del cabecero para pausar Pulp cuando manejes información sensible (contraseñas, 2FA, etc.). Otro clic y vuelve a capturar.
+- **Iniciar con Windows** — nuevo toggle en Ajustes para que Pulp arranque automáticamente cuando inicies sesión.
+
+## Mejoras visuales
+
+- El elemento seleccionado por teclado se destaca con borde naranja.
+- Cada uno de los primeros 9 elementos muestra su atajo (⌃1, ⌃2, ⌃3...) al pasar el ratón.
+
+## Auto-actualización
+
+Esta es la primera versión que llega vía auto-actualización a usuarios con v0.1.1 instalada. Si ves el banner "Update available - v0.1.2", haz clic en "Install" y Pulp se actualiza solo.

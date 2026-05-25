@@ -1,0 +1,9 @@
+## Novedades
+
+- **Bienvenida para nuevos usuarios** — la primera vez que abras Pulp verás un recorrido de 3 pasos explicando dónde vive, cómo abrirlo desde cualquier sitio y cómo empezar a usarlo. Puedes volver a verlo desde Ajustes.
+- **Detección de URLs** — cuando copias un enlace, aparece un botón "Open" al lado de la copia. Un clic y lo abres en tu navegador.
+- **Detección de colores** — cuando copias un código de color (hex, rgb, hsl), Pulp muestra una pequeña vista previa del color al lado del contenido. Útil para diseñadores y desarrolladores.
+
+## Auto-actualización
+
+Si tienes v0.1.2 instalada verás el banner al arrancar. Un clic en "Install" y Pulp se actualiza solo.

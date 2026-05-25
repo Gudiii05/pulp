@@ -13,6 +13,7 @@ use crate::db::{ClipType, Database, NewClip};
 pub struct WatcherState {
     pub last_text: Option<String>,
     pub last_image_hash: Option<u64>,
+    pub paused: bool,
 }
 
 pub type WatcherHandle = Arc<Mutex<WatcherState>>;
@@ -28,6 +29,16 @@ pub fn start_clipboard_watcher(app: AppHandle, state: WatcherHandle) {
         };
 
         loop {
+            // Honor pause: skip everything but keep the thread alive
+            let paused = {
+                let s = state.lock().unwrap();
+                s.paused
+            };
+            if paused {
+                thread::sleep(Duration::from_millis(500));
+                continue;
+            }
+
             // Image slot first — arboard treats text/image as separate slots
             if let Ok(img) = clipboard.get_image() {
                 let hash = hash_bytes(&img.bytes);
@@ -40,7 +51,7 @@ pub fn start_clipboard_watcher(app: AppHandle, state: WatcherHandle) {
                         let mut s = state.lock().unwrap();
                         s.last_image_hash = Some(hash);
                     }
-                    if let Ok(thumb_b64) = encode_thumbnail(&img) {
+                    if let Ok(png_b64) = encode_image_png(&img) {
                         let preview = format!(
                             "{}x{} image · {} KB",
                             img.width,
@@ -52,7 +63,7 @@ pub fn start_clipboard_watcher(app: AppHandle, state: WatcherHandle) {
                             NewClip {
                                 content: preview,
                                 clip_type: ClipType::Image,
-                                thumbnail: Some(thumb_b64),
+                                thumbnail: Some(png_b64),
                             },
                         );
                     }
@@ -101,7 +112,19 @@ const CODE_PATTERNS: &[&str] = &[
     "{", "=>", "fn ", "def ", "import ", "const ", "SELECT", "<?", "//", "```",
 ];
 
+fn is_single_url(text: &str) -> bool {
+    let t = text.trim();
+    if t.contains(char::is_whitespace) {
+        return false;
+    }
+    t.starts_with("http://") || t.starts_with("https://")
+}
+
 fn detect_type(text: &str) -> ClipType {
+    // A pure URL is text, not code — even though it contains "//".
+    if is_single_url(text) {
+        return ClipType::Text;
+    }
     for p in CODE_PATTERNS {
         if text.contains(p) {
             return ClipType::Code;
@@ -127,7 +150,9 @@ fn hash_bytes(bytes: &[u8]) -> u64 {
     h.finish()
 }
 
-fn encode_thumbnail(img: &arboard::ImageData) -> Result<String, Box<dyn std::error::Error>> {
+/// Encodes the full clipboard image as a base64 PNG. We keep the original
+/// dimensions so the clip can be put back to the clipboard later byte-for-byte.
+fn encode_image_png(img: &arboard::ImageData) -> Result<String, Box<dyn std::error::Error>> {
     let buffer: ImageBuffer<Rgba<u8>, Vec<u8>> = ImageBuffer::from_raw(
         img.width as u32,
         img.height as u32,
@@ -135,9 +160,8 @@ fn encode_thumbnail(img: &arboard::ImageData) -> Result<String, Box<dyn std::err
     )
     .ok_or("failed to build image buffer")?;
 
-    let thumb = image::imageops::thumbnail(&buffer, 320, 320);
     let mut png_bytes: Vec<u8> = Vec::new();
-    thumb.write_to(&mut Cursor::new(&mut png_bytes), image::ImageFormat::Png)?;
+    buffer.write_to(&mut Cursor::new(&mut png_bytes), image::ImageFormat::Png)?;
     Ok(general_purpose::STANDARD.encode(&png_bytes))
 }
 
@@ -151,4 +175,37 @@ pub fn write_text_to_clipboard(text: &str, state: &WatcherHandle) -> Result<(), 
     }
     let mut cb = Clipboard::new().map_err(|e| e.to_string())?;
     cb.set_text(text).map_err(|e| e.to_string())
+}
+
+/// Decodes a base64-encoded PNG and writes it back to the system clipboard
+/// as an image. Also marks the image as "already seen" so the watcher does
+/// not save it as a new clip.
+pub fn write_image_to_clipboard(b64_png: &str, state: &WatcherHandle) -> Result<(), String> {
+    let png_bytes = general_purpose::STANDARD
+        .decode(b64_png.as_bytes())
+        .map_err(|e| format!("base64 decode failed: {}", e))?;
+
+    let img = image::load_from_memory_with_format(&png_bytes, image::ImageFormat::Png)
+        .map_err(|e| format!("png decode failed: {}", e))?;
+    let rgba = img.to_rgba8();
+    let (width, height) = rgba.dimensions();
+    let raw = rgba.into_raw();
+
+    // Update the watcher state BEFORE setting the clipboard so the next
+    // poll tick recognizes this as already-seen and skips re-saving it.
+    {
+        let mut s = state.lock().unwrap();
+        s.last_image_hash = Some(hash_bytes(&raw));
+        s.last_text = None;
+    }
+
+    let image_data = arboard::ImageData {
+        width: width as usize,
+        height: height as usize,
+        bytes: std::borrow::Cow::Owned(raw),
+    };
+
+    let mut cb = Clipboard::new().map_err(|e| e.to_string())?;
+    cb.set_image(image_data).map_err(|e| e.to_string())?;
+    Ok(())
 }

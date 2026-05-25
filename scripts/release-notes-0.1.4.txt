@@ -1,0 +1,4 @@
+## Arreglo
+
+- **Detección de URLs corregida** — antes las URLs (`https://...`) se clasificaban como código porque contienen `//`, así que el botón "Open" no aparecía. Ahora se detectan correctamente como texto y el botón funciona como debería.
+- La detección de colores y URLs ahora se ejecuta también sobre clips ya guardados como código, por si la clasificación falla.

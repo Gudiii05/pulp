@@ -1,10 +1,14 @@
-import { useLayoutEffect, useRef, useState } from "react";
+import { useLayoutEffect, useMemo, useRef, useState } from "react";
+import { invoke } from "@tauri-apps/api/core";
 import type { Clip } from "../types";
+import { detectColor, detectUrl } from "../utils/smartClip";
 import styles from "./ClipItem.module.css";
 
 interface ClipItemProps {
   clip: Clip;
   index: number;
+  selected: boolean;
+  onHover: () => void;
   onCopy: (c: Clip) => void;
   onPin: (c: Clip) => void;
   onDelete: (c: Clip) => void;
@@ -33,11 +37,14 @@ function badgeLabel(kind: Clip["clipType"]) {
 export default function ClipItem({
   clip,
   index,
+  selected,
+  onHover,
   onCopy,
   onPin,
   onDelete,
 }: ClipItemProps) {
   const enterDelay = Math.min(index, 12) * 30;
+  const itemRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const [overflowing, setOverflowing] = useState(false);
 
@@ -47,18 +54,81 @@ export default function ClipItem({
     setOverflowing(el.scrollHeight > el.clientHeight + 1);
   }, [clip.content, clip.thumbnail]);
 
+  // URL and color detection runs on any non-image clip. We can't rely on
+  // clipType === "TEXT" because the type classifier (correctly or not) may
+  // route content with certain chars (e.g. "//") to CODE.
+  const url = useMemo(
+    () => (clip.clipType !== "IMAGE" ? detectUrl(clip.content) : null),
+    [clip.clipType, clip.content]
+  );
+  const color = useMemo(
+    () => (clip.clipType !== "IMAGE" ? detectColor(clip.content) : null),
+    [clip.clipType, clip.content]
+  );
+
+  const handleOpenUrl = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!url) return;
+    try {
+      await invoke("open_url", { url });
+    } catch (err) {
+      console.error("open_url failed", err);
+    }
+  };
+
+  // Scroll selected item into view when keyboard navigation moves to it
+  useLayoutEffect(() => {
+    if (selected && itemRef.current) {
+      itemRef.current.scrollIntoView({ block: "nearest" });
+    }
+  }, [selected]);
+
   return (
     <div
-      className={styles.item}
+      ref={itemRef}
+      className={`${styles.item} ${selected ? styles.selected : ""}`}
       style={{ animationDelay: `${enterDelay}ms` }}
       onClick={() => onCopy(clip)}
+      onMouseEnter={onHover}
       role="button"
-      tabIndex={0}
+      tabIndex={-1}
     >
       <div className={styles.row1}>
         <span className={`${styles.badge} ${badgeClass(clip.clipType)}`}>
           {badgeLabel(clip.clipType)}
         </span>
+        {color && (
+          <span
+            className={styles.colorSwatch}
+            style={{ background: color }}
+            title={color}
+            aria-label={`color ${color}`}
+          />
+        )}
+        {url && (
+          <button
+            className={styles.urlBtn}
+            onClick={handleOpenUrl}
+            title={`Open ${url}`}
+            aria-label="Open URL"
+          >
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none">
+              <path
+                d="M14 3h7v7M21 3l-9 9M19 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h6"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+            Open
+          </button>
+        )}
+        {index < 9 && (
+          <span className={styles.shortcutHint} title={`Ctrl+${index + 1}`}>
+            ⌃{index + 1}
+          </span>
+        )}
         <span className={styles.spacer} />
         {clip.pinned && (
           <span className={styles.pinIcon} title="pinned" aria-hidden>

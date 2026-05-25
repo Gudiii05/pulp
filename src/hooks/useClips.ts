@@ -42,13 +42,15 @@ export function useClips(tab: TabFilter, query: string) {
   }, [fetchClips]);
 
   const copy = useCallback(async (clip: Clip): Promise<boolean> => {
-    if (clip.clipType === "IMAGE") {
-      // Images are stored as thumbnails only; we cannot reliably restore
-      // full-res binary. Skip with a console note for now.
-      console.warn("Image copy-back not supported yet");
-      return false;
-    }
     try {
+      if (clip.clipType === "IMAGE") {
+        if (!clip.thumbnail) {
+          console.error("image clip has no data");
+          return false;
+        }
+        await invoke("copy_image_to_clipboard", { b64Png: clip.thumbnail });
+        return true;
+      }
       await invoke("copy_to_clipboard", { content: clip.content });
       return true;
     } catch (e) {

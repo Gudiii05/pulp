@@ -44,6 +44,17 @@
   display: flex;
   align-items: center;
   gap: 6px;
+  padding: 4px 8px;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: background 150ms ease-out, border-color 150ms ease-out;
+}
+
+.live:hover {
+  background: var(--bg-card);
+  border-color: var(--border);
 }
 
 .dot {
@@ -59,6 +70,16 @@
   font-size: 11px;
   color: var(--text-secondary);
   font-weight: 500;
+}
+
+.livePaused .dot {
+  background: var(--text-tertiary);
+  animation: none;
+  box-shadow: 0 0 0 3px rgba(174, 174, 178, 0.18);
+}
+
+.livePaused .liveLabel {
+  color: var(--text-tertiary);
 }
 
 .right {
@@ -95,4 +116,15 @@
 .themeToggle:hover {
   background: var(--bg-hover);
   color: var(--accent);
+}
+
+.lockActive {
+  background: var(--accent);
+  color: var(--bg-primary);
+  border-color: var(--accent);
+}
+
+.lockActive:hover {
+  background: var(--accent);
+  color: var(--bg-primary);
 }
