@@ -3,11 +3,25 @@ param(
     [string]$Version
 )
 
+# DEV-LOCAL SCRIPT — NOT a production release path.
+# Production releases are owned by .github/workflows/release.yml, triggered by
+# pushing a vX.Y.Z tag. This script is for local development builds and
+# emergency hot-fixes only. It does NOT produce the canonical latest.json used
+# by the auto-updater in production — that is assembled exclusively by CI.
+
 $ErrorActionPreference = 'Stop'
 $env:PATH = "$env:USERPROFILE\.cargo\bin;" + $env:PATH
 
 $keyPath = "$env:USERPROFILE\.tauri\pulp.key"
-$keyPwd = 'pulp123'
+
+# Read passphrase from environment; fall back to interactive prompt for local dev use.
+$keyPwd = $env:TAURI_SIGNING_PRIVATE_KEY_PASSWORD
+if (-not $keyPwd) {
+    $secureString = Read-Host -AsSecureString -Prompt "Signing key passphrase"
+    $keyPwd = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto(
+        [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($secureString)
+    )
+}
 $notesFile = "C:\pulp\scripts\release-notes-$Version.txt"
 
 if (-not (Test-Path $keyPath)) {
