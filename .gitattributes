@@ -1,0 +1,12 @@
+# Default: let git auto-detect text/binary
+* text=auto
+
+# Shell scripts MUST use LF — CRLF breaks the shebang on Unix runners
+*.sh text eol=lf
+
+# CI configs are consumed by Unix runners, force LF
+.github/**/*.yml text eol=lf
+.github/**/*.yaml text eol=lf
+
+# Node scripts run on Unix CI, force LF for consistency
+scripts/ci/*.js text eol=lf
