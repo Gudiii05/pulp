@@ -1,0 +1,9 @@
+## Smoke test rc2 — fix bundle.linux config casing
+
+Second smoke-test attempt. rc1 failed because `bundle.linux.appImage` (camelCase) is rejected by the Tauri 2 config schema — the correct key is `appimage` (lowercase). One-line fix in `src-tauri/tauri.conf.json`.
+
+### What's being validated
+
+Same as rc1: dual-platform build, updater signing, `latest.json` assembly, Linux `.deb` runtime deps, AppImage with bundled GStreamer.
+
+**Do NOT install over a production Pulp install.**
