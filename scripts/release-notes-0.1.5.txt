@@ -1,0 +1,3 @@
+## Nuevo
+
+- **Candado para fijar pestaña** — ahora podés fijar una pestaña con el candado para que no se mueva ni se cierre.
