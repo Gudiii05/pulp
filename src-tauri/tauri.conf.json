@@ -1,7 +1,7 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
   "productName": "Pulp",
-  "version": "0.1.6-rc2",
+  "version": "0.1.6",
   "identifier": "com.pulp.clipboard",
   "build": {
     "beforeDevCommand": "npm run dev",

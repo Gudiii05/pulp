@@ -1,0 +1,37 @@
+## Nuevo
+
+### 🐧 Soporte para Linux
+
+Pulp ahora se puede instalar en Linux (Ubuntu 22.04+, Debian 12+, Fedora 38+, Arch reciente). Dos formatos disponibles:
+
+- **AppImage** (`pulp_0.1.6_amd64.AppImage`) — portable, descargás y corrés.
+- **`.deb`** (`pulp_0.1.6_amd64.deb`) — para Debian / Ubuntu, instalá con `sudo dpkg -i`.
+
+Recomendado en sesiones **X11 / XWayland**. Bajo Wayland puro (GNOME default) hay limitaciones — ver [Limitaciones en Linux](https://github.com/Gudiii05/pulp/blob/main/README.md#limitaciones-en-linux) en el README.
+
+### 🔒 Rotación del key de firma
+
+Por una filtración de la passphrase en commits anteriores, el key que firma las actualizaciones automáticas fue rotado. Más detalles en los commits de la rama `security/key-rotation` (PR #1).
+
+---
+
+## ⚠️ IMPORTANTE para usuarios en 0.1.5
+
+Esta release está firmada con un **key nuevo** distinto al que viene embebido en Pulp 0.1.5. **El auto-updater NO va a poder actualizarte automáticamente** porque la firma no coincide con la que tu instalación actual espera.
+
+Para pasarte a 0.1.6:
+
+1. Descargá manualmente `Pulp_0.1.6_x64-setup.exe` desde esta misma página de releases.
+2. Cerrá Pulp si lo tenés abierto.
+3. Ejecutá el instalador. Va a sobreescribir tu instalación de 0.1.5 conservando tu historial.
+
+A partir de 0.1.7 el auto-updater volverá a funcionar normal (la 0.1.6 ya tendrá el key nuevo embebido).
+
+---
+
+## Cambios técnicos
+
+- CI multiplataforma con GitHub Actions: builds en Windows + Linux desde un solo push de tag.
+- Bundling de Linux: `bundle.linux.deb.depends` declara `libwebkit2gtk-4.1-0` y `libayatana-appindicator3-1`; AppImage con `bundleMediaFramework` para incluir GStreamer.
+- CSS fallback con `@supports not (backdrop-filter)` para sesiones X11 sin compositor — la estética glass degrada a superficies opacas.
+- `latest.json` ahora es generado exclusivamente por CI (ya no por scripts locales).
