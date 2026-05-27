@@ -1,0 +1,7 @@
+## Arreglo
+
+- **Candado: ahora mantiene Pulp visible al cambiar de app** — antes, aunque tuvieras activado el candado, si clickeabas en otra aplicación (navegador, terminal, etc.) Pulp se cerraba igual. Ahora con el candado activo Pulp se queda arriba mientras vos seguís trabajando en lo otro.
+
+## Cambios internos
+
+- Pipeline de CI simplificado: el step de ensamblado de `latest.json` se removió porque `tauri-action` ya lo generaba completo. Los próximos releases corren end-to-end sin intervención manual.
