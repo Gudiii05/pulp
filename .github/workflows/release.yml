@@ -103,27 +103,15 @@ jobs:
         with:
           releaseId: ${{ needs.create-release.outputs.release_id }}
 
-  publish-latest-json:
-    name: Assemble latest.json and publish release
+  publish-release:
+    name: Publish release
     needs: [create-release, build]
     if: needs.build.result == 'success'
     runs-on: ubuntu-22.04
     env:
       TAG: v${{ needs.create-release.outputs.version }}
-      VERSION: ${{ needs.create-release.outputs.version }}
     steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-
-      - name: Assemble and upload latest.json
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: node scripts/ci/assemble-latest-json.js
-
-      - name: Publish release
+      - name: Promote draft release to published
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: gh release edit "$TAG" --draft=false
