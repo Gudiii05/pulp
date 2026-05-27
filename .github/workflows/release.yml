@@ -114,4 +114,7 @@ jobs:
       - name: Promote draft release to published
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh release edit "$TAG" --draft=false
+        # --repo avoids the implicit git remote lookup, so this job does
+        # not need a checkout (which would just clone the repo to read
+        # one URL from .git/config).
+        run: gh release edit "$TAG" --draft=false --repo "${{ github.repository }}"
