@@ -4,7 +4,7 @@
 
 # Pulp
 
-**Gestor de portapapeles ligero para Windows**
+**Gestor de portapapeles ligero para Windows y Linux**
 
 [![Última versión](https://img.shields.io/github/v/release/Gudiii05/pulp?style=flat-square&color=ff5c2b)](https://github.com/Gudiii05/pulp/releases/latest)
 [![Descargas](https://img.shields.io/github/downloads/Gudiii05/pulp/total?style=flat-square&color=ff5c2b)](https://github.com/Gudiii05/pulp/releases)
@@ -14,7 +14,7 @@
 
 ---
 
-Pulp es un gestor de portapapeles ligero para Windows. Vive en la bandeja del sistema y se abre con un atajo de teclado configurable. Cada vez que copias algo (texto, código o una imagen), Pulp lo guarda automáticamente para que puedas volver a usarlo en cualquier momento.
+Pulp es un gestor de portapapeles ligero para Windows y Linux. Vive en la bandeja del sistema y se abre con un atajo de teclado configurable. Cada vez que copias algo (texto, código o una imagen), Pulp lo guarda automáticamente para que puedas volver a usarlo en cualquier momento.
 
 Diseño inspirado en Apple, modo claro y oscuro, búsqueda en tiempo real y la posibilidad de fijar tus copias favoritas para que no se borren. Pensado para que escribas menos y trabajes más rápido.
 
@@ -32,6 +32,8 @@ Diseño inspirado en Apple, modo claro y oscuro, búsqueda en tiempo real y la p
 
 ## Instalación
 
+### Windows
+
 1. Ve a la [página de Releases](https://github.com/Gudiii05/pulp/releases/latest).
 2. Descarga el instalador que prefieras:
    - **`Pulp_X.Y.Z_x64-setup.exe`** — instalador ligero (recomendado).
@@ -41,6 +43,33 @@ Diseño inspirado en Apple, modo claro y oscuro, búsqueda en tiempo real y la p
 5. Sigue el asistente de instalación.
 
 Pulp se instalará en `%LOCALAPPDATA%\Pulp` y añadirá un acceso directo en el menú de inicio.
+
+### Linux
+
+Soportado en distribuciones modernas con **Ubuntu 22.04+** (o equivalente: Debian 12+, Fedora 38+, Arch reciente). Antes de instalar, asegurate de que la sesión sea **X11 / XWayland**, no Wayland puro (ver [Limitaciones en Linux](#limitaciones-en-linux)).
+
+**Opción A — AppImage (recomendado, portable):**
+
+1. Descargá `Pulp_X.Y.Z_amd64.AppImage` desde [Releases](https://github.com/Gudiii05/pulp/releases/latest).
+2. Dale permisos de ejecución y corré:
+   ```bash
+   chmod +x Pulp_X.Y.Z_amd64.AppImage
+   ./Pulp_X.Y.Z_amd64.AppImage
+   ```
+
+**Opción B — `.deb` (Debian / Ubuntu):**
+
+1. Descargá `Pulp_X.Y.Z_amd64.deb` desde Releases.
+2. Instalá con:
+   ```bash
+   sudo dpkg -i Pulp_X.Y.Z_amd64.deb
+   sudo apt-get install -f  # resuelve dependencias si faltan
+   ```
+
+**Dependencias del sistema** (las resuelve `apt-get install -f` automáticamente):
+
+- `libwebkit2gtk-4.1-0` — motor de renderizado web
+- `libayatana-appindicator3-1` (o `libappindicator3-1` en distros viejas) — soporte para icono de bandeja
 
 ## Cómo se usa
 
@@ -99,13 +128,22 @@ Haz clic en el icono del sol/luna en la cabecera, junto al engranaje. Tu elecci�
 | Cerrar ventana | Haz clic fuera de ella |
 | Limpiar búsqueda | Haz clic en la `×` del campo de búsqueda |
 
+## Limitaciones en Linux
+
+El soporte de Linux apunta a sesiones **X11 / XWayland**. Bajo **Wayland puro** (GNOME 41+ por defecto en Ubuntu, Fedora Workstation), el modelo de seguridad de Wayland impone restricciones que no se pueden saltar desde la app:
+
+1. **Atajo global no funciona en GNOME Wayland.** Wayland no permite que aplicaciones de terceros registren atajos globales. Workaround: configurá el atajo manualmente en *Configuración → Teclado → Atajos personalizados* apuntando al binario de Pulp. En X11 / XWayland funciona normal.
+2. **Icono de bandeja requiere extensión en GNOME.** GNOME removió el soporte nativo de tray icons. Instalá la extensión [AppIndicator and KStatusNotifierItem Support](https://extensions.gnome.org/extension/615/appindicator-support/) para que aparezca el ícono. En KDE Plasma, XFCE, Cinnamon y MATE funciona sin extra.
+3. **Captura automática del portapapeles degradada en Wayland puro.** Wayland bloquea la lectura del portapapeles en segundo plano por diseño (no es un bug, es la política de seguridad). En Wayland puro, Pulp solo capturará lo que copies *mientras la ventana de Pulp esté abierta*. En X11 / XWayland, la captura automática funciona normal.
+4. **Auto-actualización no disponible en `.deb`.** El paquete `.deb` no incluye el updater integrado (el sistema de paquetes lo gestiona el SO). En AppImage el updater integrado sí funciona.
+5. **Autostart no expuesto en la UI bajo Linux.** El toggle de "iniciar al arrancar" está oculto en Linux por diferencias entre entornos de escritorio. Si lo querés, agregalo manualmente como `.desktop` en `~/.config/autostart/`.
+
 ## Privacidad
 
 Pulp guarda todo en local en una base de datos SQLite ubicada en:
 
-```
-%APPDATA%\com.pulp.clipboard\pulp.db
-```
+- **Windows:** `%APPDATA%\com.pulp.clipboard\pulp.db`
+- **Linux:** `~/.local/share/com.pulp.clipboard/pulp.db`
 
 No envía ningún dato a ningún servidor. Lo único que sale a internet es la consulta a GitHub para comprobar si hay actualizaciones (puedes desactivarlo cortando la conexión, no hay ningún tracking ni telemetría).
 

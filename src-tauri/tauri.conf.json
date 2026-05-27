@@ -44,7 +44,18 @@
       "icons/128x128@2x.png",
       "icons/icon.ico",
       "icons/icon.png"
-    ]
+    ],
+    "linux": {
+      "deb": {
+        "depends": [
+          "libwebkit2gtk-4.1-0",
+          "libayatana-appindicator3-1 | libappindicator3-1"
+        ]
+      },
+      "appImage": {
+        "bundleMediaFramework": true
+      }
+    }
   },
   "plugins": {
     "updater": {
