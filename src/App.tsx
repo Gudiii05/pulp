@@ -40,6 +40,14 @@ export default function App() {
     };
   }, [refresh]);
 
+  // Sync the lock toggle to the backend so the blur handler in Rust knows
+  // whether it should hide the window when focus moves to another app.
+  useEffect(() => {
+    invoke("set_locked", { locked }).catch((e) => {
+      console.error("set_locked failed", e);
+    });
+  }, [locked]);
+
   // Reset selection when list changes shape (new tab, new search)
   useEffect(() => {
     setSelectedIndex(0);

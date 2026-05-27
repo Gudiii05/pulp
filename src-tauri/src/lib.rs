@@ -20,6 +20,10 @@ pub type ConfigState = Arc<ConfigStore>;
 pub struct DragGate(pub Mutex<Option<Instant>>);
 pub type DragGateState = Arc<DragGate>;
 
+/// When true, the blur-hide handler keeps the window visible after the
+/// user focuses another app. Toggled from the frontend via `set_locked`.
+pub type LockedState = Arc<Mutex<bool>>;
+
 const DRAG_BLUR_GRACE_MS: u64 = 800;
 
 #[tauri::command]
@@ -191,6 +195,12 @@ fn start_window_drag(app: AppHandle, gate: tauri::State<DragGateState>) -> Resul
     Ok(())
 }
 
+#[tauri::command]
+fn set_locked(state: tauri::State<LockedState>, locked: bool) -> Result<(), String> {
+    *state.lock().unwrap() = locked;
+    Ok(())
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
@@ -251,15 +261,26 @@ pub fn run() {
             let drag_gate: DragGateState = Arc::new(DragGate(Mutex::new(None)));
             handle.manage(drag_gate.clone());
 
+            // Locked flag — when true the blur handler does not auto-hide
+            // the window, letting the user interact with other apps while
+            // keeping Pulp on top.
+            let locked: LockedState = Arc::new(Mutex::new(false));
+            handle.manage(locked.clone());
+
             // Tray
             tray::setup_tray(app)?;
 
-            // Window: hide on blur, unless we're in the middle of a drag.
+            // Window: hide on blur, unless we're in the middle of a drag
+            // or the user has locked the window open.
             if let Some(win) = handle.get_webview_window("main") {
                 let win_clone = win.clone();
                 let gate_for_blur = drag_gate.clone();
+                let locked_for_blur = locked.clone();
                 win.on_window_event(move |evt| {
                     if let WindowEvent::Focused(false) = evt {
+                        if *locked_for_blur.lock().unwrap() {
+                            return;
+                        }
                         let in_drag = gate_for_blur
                             .0
                             .lock()
@@ -293,6 +314,7 @@ pub fn run() {
             toggle_window,
             hide_window,
             start_window_drag,
+            set_locked,
             get_hotkey,
             set_hotkey,
         ])
