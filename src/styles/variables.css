@@ -9,6 +9,10 @@
   --bg-card: rgba(255, 255, 255, 0.6);
   --bg-hover: rgba(255, 255, 255, 0.85);
 
+  /* Opaque fallbacks used when backdrop-filter is unsupported (e.g. X11 without compositor) */
+  --bg-base-opaque: #ececf0;
+  --bg-card-opaque: #f6f6f8;
+
   /* Solid surface for clip content (no glass, for readability) */
   --bg-card-solid: #ffffff;
   --bg-card-solid-hover: #f4f4f7;
@@ -70,6 +74,9 @@
   --bg-card: rgba(58, 58, 60, 0.45);
   --bg-hover: rgba(72, 72, 76, 0.6);
 
+  --bg-base-opaque: #1c1c1e;
+  --bg-card-opaque: #2c2c2e;
+
   --bg-card-solid: #2c2c2e;
   --bg-card-solid-hover: #38383a;
 
@@ -99,6 +106,9 @@
     --bg-base: rgba(28, 28, 30, 0.68);
     --bg-card: rgba(58, 58, 60, 0.45);
     --bg-hover: rgba(72, 72, 76, 0.6);
+
+    --bg-base-opaque: #1c1c1e;
+    --bg-card-opaque: #2c2c2e;
 
     --bg-card-solid: #2c2c2e;
     --bg-card-solid-hover: #38383a;

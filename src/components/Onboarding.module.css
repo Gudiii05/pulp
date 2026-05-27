@@ -12,6 +12,12 @@
   border-radius: var(--radius-window);
 }
 
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .overlay {
+    background: rgba(0, 0, 0, 0.78);
+  }
+}
+
 .panel {
   margin: var(--space-3);
   width: 100%;

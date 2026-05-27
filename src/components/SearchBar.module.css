@@ -22,6 +22,12 @@
   transition: border-color 150ms ease-out, background 150ms ease-out;
 }
 
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .field {
+    background: var(--bg-card-opaque);
+  }
+}
+
 .field:focus-within {
   border-color: var(--accent);
   background: var(--bg-hover);
