@@ -1,0 +1,16 @@
+## Nuevo
+
+### 🍎 Soporte para macOS
+
+Pulp ahora se puede instalar en **macOS 11 Big Sur o superior**, tanto Apple Silicon (M1/M2/M3) como Intel — el `.dmg` es binario universal.
+
+- Descargá `Pulp_0.1.8_universal.dmg` desde la página de releases.
+- Abrí el `.dmg` y arrastrá Pulp.app a `/Applications`.
+- La primera vez: **click derecho** sobre Pulp.app → **Open** (workaround para el aviso de Gatekeeper, el binario no está notarizado por Apple).
+
+Caveats importantes — leer [Limitaciones en macOS](https://github.com/Gudiii05/pulp/blob/main/README.md#limitaciones-en-macos) en el README antes de configurar el atajo de teclado. El default `Ctrl+Shift+V` puede chocar con "Paste and Match Style" de macOS; cambialo desde Ajustes a `Cmd+Shift+V` o similar.
+
+## Cambios internos
+
+- CI matrix ampliado: ahora buildea Windows + Linux + macOS desde un solo tag push.
+- Step de publish del workflow usa `--repo` explícito para no necesitar checkout (fix para que la 0.1.7 hubiera salido sin intervención manual).
