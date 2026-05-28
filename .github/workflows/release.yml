@@ -61,8 +61,16 @@ jobs:
         include:
           - platform: windows-latest
             target: x86_64-pc-windows-msvc
+            args: ''
           - platform: ubuntu-22.04
             target: x86_64-unknown-linux-gnu
+            args: ''
+          # macOS: build a single universal binary that runs on both Apple
+          # Silicon and Intel. Requires both rust targets installed so cargo
+          # can produce both archs and lipo them together.
+          - platform: macos-latest
+            target: aarch64-apple-darwin,x86_64-apple-darwin
+            args: '--target universal-apple-darwin'
     runs-on: ${{ matrix.platform }}
     steps:
       - uses: actions/checkout@v4
@@ -102,6 +110,7 @@ jobs:
           TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
         with:
           releaseId: ${{ needs.create-release.outputs.release_id }}
+          args: ${{ matrix.args }}
 
   publish-release:
     name: Publish release

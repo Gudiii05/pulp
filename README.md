@@ -4,7 +4,7 @@
 
 # Pulp
 
-**Gestor de portapapeles ligero para Windows y Linux**
+**Gestor de portapapeles ligero para Windows, Linux y macOS**
 
 [![Última versión](https://img.shields.io/github/v/release/Gudiii05/pulp?style=flat-square&color=ff5c2b)](https://github.com/Gudiii05/pulp/releases/latest)
 [![Descargas](https://img.shields.io/github/downloads/Gudiii05/pulp/total?style=flat-square&color=ff5c2b)](https://github.com/Gudiii05/pulp/releases)
@@ -14,7 +14,7 @@
 
 ---
 
-Pulp es un gestor de portapapeles ligero para Windows y Linux. Vive en la bandeja del sistema y se abre con un atajo de teclado configurable. Cada vez que copias algo (texto, código o una imagen), Pulp lo guarda automáticamente para que puedas volver a usarlo en cualquier momento.
+Pulp es un gestor de portapapeles ligero para Windows, Linux y macOS. Vive en la bandeja del sistema y se abre con un atajo de teclado configurable. Cada vez que copias algo (texto, código o una imagen), Pulp lo guarda automáticamente para que puedas volver a usarlo en cualquier momento.
 
 Diseño inspirado en Apple, modo claro y oscuro, búsqueda en tiempo real y la posibilidad de fijar tus copias favoritas para que no se borren. Pensado para que escribas menos y trabajes más rápido.
 
@@ -70,6 +70,17 @@ Soportado en distribuciones modernas con **Ubuntu 22.04+** (o equivalente: Debia
 
 - `libwebkit2gtk-4.1-0` — motor de renderizado web
 - `libayatana-appindicator3-1` (o `libappindicator3-1` en distros viejas) — soporte para icono de bandeja
+
+### macOS
+
+Soportado en **macOS 11 Big Sur o superior**, tanto Apple Silicon (M1/M2/M3) como Intel — el `.dmg` es un binario universal.
+
+1. Descargá `Pulp_X.Y.Z_universal.dmg` desde [Releases](https://github.com/Gudiii05/pulp/releases/latest).
+2. Abrí el `.dmg` y arrastrá Pulp.app a `/Applications`.
+3. La primera vez que lo abras, macOS te va a mostrar: **"Pulp can't be opened because Apple cannot check it for malicious software"**. Esto es normal: el binario no está notarizado (la notarización de Apple requiere una cuenta paga de Developer de $99/año).
+4. Para abrirlo igual: hacé **click derecho** sobre Pulp.app en Applications → **Open** → confirmá. Solo hay que hacerlo la primera vez.
+
+Importante: ver [Limitaciones en macOS](#limitaciones-en-macos) antes de configurar el atajo de teclado.
 
 ## Cómo se usa
 
@@ -128,6 +139,17 @@ Haz clic en el icono del sol/luna en la cabecera, junto al engranaje. Tu elecci�
 | Cerrar ventana | Haz clic fuera de ella |
 | Limpiar búsqueda | Haz clic en la `×` del campo de búsqueda |
 
+## Limitaciones en macOS
+
+El soporte de macOS es **inicial y no testeado en producción**. Funciona razonablemente para el flujo principal (capturar + buscar + copiar) pero hay caveats:
+
+1. **App sin notarizar.** macOS muestra el warning "can't be opened" la primera vez. Workaround: click derecho → Open → confirmar (ver instrucciones de instalación arriba). Sin cuenta paga de Apple Developer no hay forma de evitarlo.
+2. **El atajo default (`Ctrl+Shift+V`) puede chocar con "Paste and Match Style" de macOS.** Si ves que el atajo no responde, cambiálo desde Ajustes a algo como `Cmd+Shift+V` o `Cmd+Option+V`.
+3. **Permisos de Accessibility.** Para que el atajo global funcione en cualquier app, posiblemente tengas que dar permiso a Pulp en *Preferencias del Sistema → Privacidad y seguridad → Accesibilidad*. Si el atajo no dispara, chequeá eso.
+4. **Auto-update funciona pero con la misma advertencia de seguridad.** Cuando Pulp se actualice, vas a tener que volver a hacer click derecho → Open la primera vez que abras la versión nueva.
+
+Si encontrás bugs específicos de Mac, [abrí un issue](https://github.com/Gudiii05/pulp/issues) con la versión de macOS y el modelo (Apple Silicon o Intel).
+
 ## Limitaciones en Linux
 
 El soporte de Linux apunta a sesiones **X11 / XWayland**. Bajo **Wayland puro** (GNOME 41+ por defecto en Ubuntu, Fedora Workstation), el modelo de seguridad de Wayland impone restricciones que no se pueden saltar desde la app:
@@ -144,6 +166,7 @@ Pulp guarda todo en local en una base de datos SQLite ubicada en:
 
 - **Windows:** `%APPDATA%\com.pulp.clipboard\pulp.db`
 - **Linux:** `~/.local/share/com.pulp.clipboard/pulp.db`
+- **macOS:** `~/Library/Application Support/com.pulp.clipboard/pulp.db`
 
 No envía ningún dato a ningún servidor. Lo único que sale a internet es la consulta a GitHub para comprobar si hay actualizaciones (puedes desactivarlo cortando la conexión, no hay ningún tracking ni telemetría).
 
