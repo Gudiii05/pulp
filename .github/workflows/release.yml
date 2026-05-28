@@ -59,18 +59,20 @@ jobs:
       fail-fast: false
       matrix:
         include:
+          # Windows: NSIS only (skip MSI — enterprise-only, no consumer demand).
           - platform: windows-latest
             target: x86_64-pc-windows-msvc
-            args: ''
+            args: '--bundles nsis'
+          # Linux: AppImage only (universal, no install). Skip .deb/.rpm.
           - platform: ubuntu-22.04
             target: x86_64-unknown-linux-gnu
-            args: ''
-          # macOS: build a single universal binary that runs on both Apple
-          # Silicon and Intel. Requires both rust targets installed so cargo
-          # can produce both archs and lipo them together.
+            args: '--bundles appimage'
+          # macOS: single universal binary that runs on both Apple Silicon
+          # and Intel. `app` is required for the updater (.app.tar.gz),
+          # `dmg` is the user-facing installer.
           - platform: macos-latest
             target: aarch64-apple-darwin,x86_64-apple-darwin
-            args: '--target universal-apple-darwin'
+            args: '--target universal-apple-darwin --bundles app,dmg'
     runs-on: ${{ matrix.platform }}
     steps:
       - uses: actions/checkout@v4
