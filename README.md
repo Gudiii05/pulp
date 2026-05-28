@@ -35,9 +35,7 @@ Diseño inspirado en Apple, modo claro y oscuro, búsqueda en tiempo real y la p
 ### Windows
 
 1. Ve a la [página de Releases](https://github.com/Gudiii05/pulp/releases/latest).
-2. Descarga el instalador que prefieras:
-   - **`Pulp_X.Y.Z_x64-setup.exe`** — instalador ligero (recomendado).
-   - **`Pulp_X.Y.Z_x64_en-US.msi`** — instalador MSI para entornos corporativos.
+2. Descarga **`Pulp_X.Y.Z_x64-setup.exe`** desde la sección **Assets**.
 3. Haz doble clic en el archivo descargado.
 4. **Windows SmartScreen** te mostrará un aviso indicando que el editor no es conocido. Esto es normal: el binario no está firmado con un certificado de Authenticode (un certificado de pago). Haz clic en **"Más información"** y luego en **"Ejecutar de todas formas"**.
 5. Sigue el asistente de instalación.
@@ -48,7 +46,7 @@ Pulp se instalará en `%LOCALAPPDATA%\Pulp` y añadirá un acceso directo en el 
 
 Soportado en distribuciones modernas con **Ubuntu 22.04+** (o equivalente: Debian 12+, Fedora 38+, Arch reciente). Antes de instalar, asegurate de que la sesión sea **X11 / XWayland**, no Wayland puro (ver [Limitaciones en Linux](#limitaciones-en-linux)).
 
-**Opción A — AppImage (recomendado, portable):**
+Pulp se distribuye en Linux como **AppImage** — un archivo portable que corre en cualquier distro sin necesidad de instalación ni dependencias del sistema.
 
 1. Descargá `Pulp_X.Y.Z_amd64.AppImage` desde [Releases](https://github.com/Gudiii05/pulp/releases/latest).
 2. Dale permisos de ejecución y corré:
@@ -57,19 +55,7 @@ Soportado en distribuciones modernas con **Ubuntu 22.04+** (o equivalente: Debia
    ./Pulp_X.Y.Z_amd64.AppImage
    ```
 
-**Opción B — `.deb` (Debian / Ubuntu):**
-
-1. Descargá `Pulp_X.Y.Z_amd64.deb` desde Releases.
-2. Instalá con:
-   ```bash
-   sudo dpkg -i Pulp_X.Y.Z_amd64.deb
-   sudo apt-get install -f  # resuelve dependencias si faltan
-   ```
-
-**Dependencias del sistema** (las resuelve `apt-get install -f` automáticamente):
-
-- `libwebkit2gtk-4.1-0` — motor de renderizado web
-- `libayatana-appindicator3-1` (o `libappindicator3-1` en distros viejas) — soporte para icono de bandeja
+Si tu entorno de escritorio no soporta AppImage de forma nativa, instalá [AppImageLauncher](https://github.com/TheAssassin/AppImageLauncher) para integración con menús e iconos.
 
 ### macOS
 
@@ -157,8 +143,7 @@ El soporte de Linux apunta a sesiones **X11 / XWayland**. Bajo **Wayland puro** 
 1. **Atajo global no funciona en GNOME Wayland.** Wayland no permite que aplicaciones de terceros registren atajos globales. Workaround: configurá el atajo manualmente en *Configuración → Teclado → Atajos personalizados* apuntando al binario de Pulp. En X11 / XWayland funciona normal.
 2. **Icono de bandeja requiere extensión en GNOME.** GNOME removió el soporte nativo de tray icons. Instalá la extensión [AppIndicator and KStatusNotifierItem Support](https://extensions.gnome.org/extension/615/appindicator-support/) para que aparezca el ícono. En KDE Plasma, XFCE, Cinnamon y MATE funciona sin extra.
 3. **Captura automática del portapapeles degradada en Wayland puro.** Wayland bloquea la lectura del portapapeles en segundo plano por diseño (no es un bug, es la política de seguridad). En Wayland puro, Pulp solo capturará lo que copies *mientras la ventana de Pulp esté abierta*. En X11 / XWayland, la captura automática funciona normal.
-4. **Auto-actualización no disponible en `.deb`.** El paquete `.deb` no incluye el updater integrado (el sistema de paquetes lo gestiona el SO). En AppImage el updater integrado sí funciona.
-5. **Autostart no expuesto en la UI bajo Linux.** El toggle de "iniciar al arrancar" está oculto en Linux por diferencias entre entornos de escritorio. Si lo querés, agregalo manualmente como `.desktop` en `~/.config/autostart/`.
+4. **Autostart no expuesto en la UI bajo Linux.** El toggle de "iniciar al arrancar" está oculto en Linux por diferencias entre entornos de escritorio. Si lo querés, agregalo manualmente como `.desktop` en `~/.config/autostart/`.
 
 ## Privacidad
 
